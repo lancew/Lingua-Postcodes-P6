@@ -1,17 +1,9 @@
-use Test::More tests => 11;
-use utf8;
+use Test;
+use lib 'lib';
 
-binmode Test::More->builder->$_, ":utf8" for qw/output failure_output todo_output/;
+use Lingua::Postcodes :name;
 
-BEGIN {
-        use_ok( 'Lingua::Postcodes' );
-}
-
-is Lingua::Postcodes::name('IE'), 'Eircode', 'Works okay without importing';
-
-use Lingua::Postcodes 'name';
-
-is name('XPTO'), undef, 'Returns UNDEF if country code does not exist';
+is name('XPTO'), Nil, 'Returns UNDEF if country code does not exist';
 
 is name('GB'), 'Postcode', '"GB" returns "Postcode"';
 is name('IE'), 'Eircode', '"IE" returns "Eircode"';
@@ -25,3 +17,5 @@ is name('FR', 'FR'), 'Code postal', '"FR" returns "Code postal" when using "FR" 
 # Romania with UTF8 character
 is name('RO', 'EN'), 'Postal code', '"RO" returns "Postal code" when using "EN" language parameter';
 is name('RO', 'RO'), 'Cod poștal', '"RO" returns "Cod poștal" when using "RO" language parameter';
+
+done-testing;

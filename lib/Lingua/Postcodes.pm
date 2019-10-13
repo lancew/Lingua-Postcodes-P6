@@ -1,12 +1,8 @@
-package Lingua::Postcodes;
+unit module Lingua::Postcodes;
 
-use strict;
-use warnings;
-use utf8;
 
 # ABSTRACT: Returns the names of postcodes/zipcodes
 
-use Exporter 'import';
 our @EXPORT_OK = 'name';
 
 my %POSTCODES = (
@@ -194,73 +190,19 @@ my %POSTCODES = (
     ZM => { EN => 'Postal code' },
 );
 
-sub name {
-    my $country_code = shift;
-    if ( @_ == 0 ) {
-        return unless exists $POSTCODES{$country_code};
+multi sub name ($country_code) is export(:name) {
+    return unless %POSTCODES{$country_code}:exists;
 
-        return $POSTCODES{$country_code}{'EN'};
-    }
-    else {
-        my $language = shift;
-        return unless exists $POSTCODES{$country_code}{$language};
-
-        return $POSTCODES{$country_code}{$language};
-    }
+    return %POSTCODES{$country_code}{'EN'};
 }
-1;
 
-=pod
+multi sub name ($country_code, $language) is export(:name) {
+    
+    
+        return unless %POSTCODES{$country_code}{$language}:exists;
 
-=encoding UTF-8
-
-=head1 NAME
-
-Lingua::Postcodes - Provide names for postcodes/zipcodes
-
-=head1 SYNOPSIS
-
-    use Lingua::Postcodes;
-
-    print 'The English name of a postcode in the UK is:', Lingua::Postcodes::name('GB');
-    # The English name of a postcode in the UK is Postcode
-
-    print 'The English name of a postcode in Japan is:', Lingua::Postcodes::name('JP', 'EN');
-    # The English name of a postcode in Japan is Postal code
-
-    print 'The Japanese name of a postcode in Japan is:', Lingua::Postcodes::name('JP', 'JP');
-    # The Japanese name of a postcode in Japan is 郵便番号
-
-    # Alternate usage:
-
-    use Ligua::Postcodes 'name';
-    print 'The Japanese name of a postcode in Japan is:', name('JP', 'JP');
-    # The Japanese name of a postcode in Japan is 郵便番号
-
-=head1 DESCRIPTION
-
-This module allows the easy translation of the name of postcodes (postal codes/ zip codes).
-
-Specifically it has been written to give the English name for post codes in other countries.
-When working on a multi-national website, where address information is required, this module
-helps the developer to put the correct term in the label of a HTML form to match the nation.
-For example, when handling the various names for postcodes across Europe.
-
-This module does not parse or handle postcodes themselves; it simply provides a programmatic
-way of getting the correct name for postcodes for nations.
-
-=head1 AUTHOR
-
-Lance Wicks E<lt>lancew@cpan.orgE<gt>
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2016, Lance Wicks. All rights reserved.
-
-This module is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself. See L<perlartistic>.
+        return %POSTCODES{$country_code}{$language};
+    
+}
 
 
-
-
-=cut
